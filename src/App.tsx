@@ -4,7 +4,6 @@ type Project = {
   title: string;
   tags: string[];
   phrase: string;
-  href: string;
   accent: string;
 };
 
@@ -13,21 +12,18 @@ const projects: Project[] = [
     title: 'YOU&MIRROR',
     tags: ['1인칭', '공포', '거울 미로'],
     phrase: '거울 미로에서 움직임이 다른 존재를 찾는 1인칭 공포 게임.',
-    href: 'https://github.com/macian-games/YOU-MIRROR',
     accent: '#B8D5E5',
   },
   {
     title: 'MahjongDefence',
     tags: ['7+1 마작', '타워 디펜스', '패 조합'],
     phrase: '7장 손패와 한 장의 쯔모로 진행하는 마작 타워 디펜스 게임.',
-    href: 'https://github.com/ConqSpace/MahjongDefence',
     accent: '#D4B77A',
   },
   {
     title: 'Invitation of the Red Moon',
     tags: ['추리', '카드 연결', '재설계 중'],
     phrase: '단서 카드를 연결해 사건을 추리하는 게임.',
-    href: 'https://github.com/macian-games/Invitation-of-the-Red-Moon',
     accent: '#C06A64',
   },
 ];
@@ -57,7 +53,6 @@ function App() {
           <h1 className="text-6xl font-semibold tracking-[-0.055em] text-white sm:text-8xl lg:text-[9rem]">
             Macian
           </h1>
-          <p className="mt-6 text-base text-muted sm:text-lg">게임을 만들고 있습니다.</p>
         </motion.div>
 
         <a
@@ -86,15 +81,7 @@ function App() {
             </a>
           </div>
 
-          <div className="flex items-center gap-6 text-xs uppercase tracking-[0.18em] text-muted">
-            <a
-              className="transition-colors hover:text-white"
-              href="https://github.com/macian-games"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub
-            </a>
+          <div className="text-xs uppercase tracking-[0.18em] text-muted">
             <span>© {new Date().getFullYear()} Macian</span>
           </div>
         </div>
@@ -118,23 +105,9 @@ function ProjectSection({ project, index }: ProjectSectionProps) {
             <span className="h-px w-12" style={{ backgroundColor: project.accent }} aria-hidden="true" />
           </div>
 
-          <a
-            className="group inline-flex max-w-full items-start gap-3 text-white"
-            href={project.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${project.title} GitHub 저장소 열기`}
-          >
-            <h2 className="break-words text-4xl font-medium tracking-[-0.04em] sm:text-6xl lg:text-7xl">
-              {project.title}
-            </h2>
-            <span
-              className="mt-1 text-lg transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-              aria-hidden="true"
-            >
-              ↗
-            </span>
-          </a>
+          <h2 className="break-words text-4xl font-medium tracking-[-0.04em] text-white sm:text-6xl lg:text-7xl">
+            {project.title}
+          </h2>
         </div>
 
         <div>
