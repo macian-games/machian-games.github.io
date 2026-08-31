@@ -1,189 +1,153 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+
+type Project = {
+  title: string;
+  tags: string[];
+  phrase: string;
+  href: string;
+  accent: string;
+};
+
+const projects: Project[] = [
+  {
+    title: 'YOU&MIRROR',
+    tags: ['1인칭', '공포', '거울 미로'],
+    phrase: '거울 미로에서 움직임이 다른 존재를 찾는 1인칭 공포 게임.',
+    href: 'https://github.com/macian-games/YOU-MIRROR',
+    accent: '#B8D5E5',
+  },
+  {
+    title: 'MahjongDefence',
+    tags: ['7+1 마작', '타워 디펜스', '패 조합'],
+    phrase: '7장 손패와 한 장의 쯔모로 진행하는 마작 타워 디펜스 게임.',
+    href: 'https://github.com/ConqSpace/MahjongDefence',
+    accent: '#D4B77A',
+  },
+  {
+    title: 'Invitation of the Red Moon',
+    tags: ['추리', '카드 연결', '재설계 중'],
+    phrase: '단서 카드를 연결해 사건을 추리하는 게임.',
+    href: 'https://github.com/macian-games/Invitation-of-the-Red-Moon',
+    accent: '#C06A64',
+  },
+];
 
 function App() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion: boolean | null = useReducedMotion();
 
   return (
-    <div ref={containerRef} className="bg-background min-h-[300vh] text-primary selection:bg-white selection:text-black">
+    <div className="min-h-screen bg-background text-primary selection:bg-white selection:text-black">
+      <header id="top" className="relative flex min-h-screen flex-col justify-between px-6 py-8 sm:px-10 lg:px-16">
+        <nav className="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-muted">
+          <a className="transition-colors hover:text-white" href="#top">
+            Macian
+          </a>
+          <a className="transition-colors hover:text-white" href="#projects">
+            Projects
+          </a>
+        </nav>
 
-      {/* ──────────────────────────────────────────────────────────── */}
-      {/* 1. Hero Section */}
-      {/* ──────────────────────────────────────────────────────────── */}
-      <section className="sticky top-0 h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
-          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-          transition={{ duration: 2, ease: "easeOut" }}
-          className="z-10 text-center"
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.7, ease: 'easeOut' }}
+          className="my-auto max-w-5xl py-24"
         >
-          <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-serif tracking-widest uppercase mb-6 drop-shadow-2xl">
+          <p className="mb-5 text-xs uppercase tracking-[0.24em] text-muted">Independent game studio</p>
+          <h1 className="text-6xl font-semibold tracking-[-0.055em] text-white sm:text-8xl lg:text-[9rem]">
             Macian
           </h1>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
-          >
-            <p className="font-sans text-muted tracking-widest uppercase text-xs md:text-sm max-w-xl mx-auto leading-relaxed">
-              빛이 닿지 않는 곳에서,<br className="md:hidden" /> 생존의 서사를 빚습니다.
-            </p>
-          </motion.div>
+          <p className="mt-6 text-base text-muted sm:text-lg">게임을 만들고 있습니다.</p>
         </motion.div>
 
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 2.5 }}
-          className="absolute bottom-12 flex flex-col items-center gap-4"
+        <a
+          className="w-fit text-xs uppercase tracking-[0.18em] text-muted transition-colors hover:text-white"
+          href="#projects"
         >
-          <span className="text-[10px] uppercase tracking-[0.3em] text-[#444]">Explore</span>
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            className="w-[1px] h-12 bg-gradient-to-b from-[#444] to-transparent"
-          />
-        </motion.div>
-      </section>
+          프로젝트 보기 ↓
+        </a>
+      </header>
 
-      {/* ──────────────────────────────────────────────────────────── */}
-      {/* 2. Main Project: My Bonnie Lies */}
-      {/* ──────────────────────────────────────────────────────────── */}
-      <ProjectBonnie />
+      <main id="projects" className="border-t border-white/10">
+        {projects.map((project: Project, index: number) => (
+          <ProjectSection key={project.title} project={project} index={index} />
+        ))}
+      </main>
 
-      {/* ──────────────────────────────────────────────────────────── */}
-      {/* 3. Sub Project: BadLord */}
-      {/* ──────────────────────────────────────────────────────────── */}
-      <ProjectBadLord />
+      <footer className="border-t border-white/10 px-6 py-16 sm:px-10 lg:px-16">
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="mb-3 text-xs uppercase tracking-[0.18em] text-muted">Contact</p>
+            <a
+              className="text-xl text-white underline decoration-white/30 underline-offset-8 transition-colors hover:decoration-white"
+              href="mailto:contact@macian.kr"
+            >
+              contact@macian.kr
+            </a>
+          </div>
 
-      {/* ──────────────────────────────────────────────────────────── */}
-      {/* 4. Contact & Footer */}
-      {/* ──────────────────────────────────────────────────────────── */}
-      <ContactFooter />
-
+          <div className="flex items-center gap-6 text-xs uppercase tracking-[0.18em] text-muted">
+            <a
+              className="transition-colors hover:text-white"
+              href="https://github.com/macian-games"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+            <span>© {new Date().getFullYear()} Macian</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
 
-function ProjectBonnie() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
+type ProjectSectionProps = {
+  project: Project;
+  index: number;
+};
 
-  const titleOpacity = useTransform(scrollYProgress, [0.1, 0.4, 0.6, 0.9], [0, 1, 1, 0]);
-  const titleY = useTransform(scrollYProgress, [0.1, 0.4, 0.6, 0.9], [100, 0, 0, -100]);
-  const textOpacity = useTransform(scrollYProgress, [0.3, 0.5, 0.6, 0.8], [0, 1, 1, 0]);
-
+function ProjectSection({ project, index }: ProjectSectionProps) {
   return (
-    <section ref={ref} className="relative h-[150vh] bg-surface z-20">
-      <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6 sm:px-12 md:px-24">
-
-        <motion.div
-          style={{ opacity: titleOpacity, y: titleY }}
-          className="w-full max-w-5xl"
-        >
-          {/* Tags */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {['Survival', 'Narrative', '1920s North Sea'].map((tag, i) => (
-              <span key={i} className="text-[10px] md:text-xs tracking-[0.2em] font-sans uppercase text-[#666] border border-[#333] px-3 py-1 rounded-full">
-                {tag}
-              </span>
-            ))}
+    <section className="flex min-h-[75vh] items-center border-b border-white/10 px-6 py-24 sm:px-10 lg:px-16">
+      <article className="mx-auto grid w-full max-w-7xl gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.45fr)] lg:items-end">
+        <div>
+          <div className="mb-8 flex items-center gap-4">
+            <span className="text-xs tabular-nums text-muted">{String(index + 1).padStart(2, '0')}</span>
+            <span className="h-px w-12" style={{ backgroundColor: project.accent }} aria-hidden="true" />
           </div>
 
-          <h2 className="text-4xl md:text-7xl lg:text-8xl font-serif tracking-tight text-center leading-tight mb-8">
-            My Bonnie Lies
-          </h2>
-
-          <motion.p
-            style={{ opacity: textOpacity }}
-            className="font-sans text-center text-muted md:text-lg lg:text-xl tracking-wide max-w-2xl mx-auto leading-relaxed"
+          <a
+            className="group inline-flex max-w-full items-start gap-3 text-white"
+            href={project.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${project.title} GitHub 저장소 열기`}
           >
-            부러진 아내의 다리, 차가운 북해.<br />
-            함께 탈출하거나, 홀로 살아남거나.
-          </motion.p>
-        </motion.div>
-
-      </div>
-    </section>
-  )
-}
-
-function ProjectBadLord() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
-
-  const sectionOpacity = useTransform(scrollYProgress, [0.2, 0.5, 0.8, 1], [0, 1, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0.2, 0.5], [0.9, 1]);
-
-  return (
-    <section ref={ref} className="relative h-[120vh] bg-[#020202] z-30">
-      <div className="sticky top-0 h-screen flex items-center justify-center px-6">
-        <motion.div
-          style={{ opacity: sectionOpacity, scale }}
-          className="text-center w-full max-w-4xl"
-        >
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
-            {['Pillaging', 'Line Defense', 'Rogue Lord'].map((tag, i) => (
-              <span key={i} className="text-[10px] md:text-xs tracking-[0.2em] font-sans uppercase text-[#822] border border-[#411] px-3 py-1 rounded-full bg-[#100000]">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <h2 className="text-5xl md:text-8xl font-serif tracking-tighter text-white mb-6" style={{ textShadow: '0 0 20px rgba(150, 0, 0, 0.3)' }}>
-            BadLord
-          </h2>
-
-          <p className="font-sans text-[#aaa] text-sm md:text-lg tracking-widest uppercase max-w-xl mx-auto">
-            명예는 버려라.<br />
-            이제부터 탐욕스러운 도적 영주의 시대다.
-          </p>
-        </motion.div>
-      </div>
-    </section>
-  )
-}
-
-function ContactFooter() {
-  return (
-    <section className="relative h-screen bg-black flex flex-col items-center justify-center z-40 px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: 'easeOut' }}
-        viewport={{ once: true, margin: "-100px" }}
-        className="text-center"
-      >
-        <h2 className="text-3xl md:text-5xl font-serif text-white mb-6 tracking-wide">
-          새로운 투쟁에 동참하시겠습니까?
-        </h2>
-
-        <div className="mt-12 flex flex-col items-center gap-6">
-          <motion.a
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            href="mailto:contact@macian.kr"
-            className="px-8 py-3 bg-white text-black font-sans uppercase tracking-[0.2em] text-sm md:text-base font-bold transition-colors hover:bg-gray-200"
-          >
-            Get In Touch
-          </motion.a>
-
-          <div className="flex gap-6 mt-8 font-sans text-xs uppercase tracking-widest text-muted">
-            <a href="https://github.com/macian-games" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a>
-          </div>
+            <h2 className="break-words text-4xl font-medium tracking-[-0.04em] sm:text-6xl lg:text-7xl">
+              {project.title}
+            </h2>
+            <span
+              className="mt-1 text-lg transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
+              aria-hidden="true"
+            >
+              ↗
+            </span>
+          </a>
         </div>
-      </motion.div>
 
-      <div className="absolute bottom-8 text-center text-[10px] text-[#333] tracking-widest font-sans uppercase">
-        © {new Date().getFullYear()} Macian Studio. All rights reserved.
-      </div>
+        <div>
+          <ul className="mb-6 flex flex-wrap gap-x-5 gap-y-2" aria-label={`${project.title} 태그`}>
+            {project.tags.map((tag: string) => (
+              <li key={tag} className="text-xs font-medium tracking-[0.08em]" style={{ color: project.accent }}>
+                {tag}
+              </li>
+            ))}
+          </ul>
+          <p className="max-w-xl text-base leading-8 text-[#B8B8B8] sm:text-lg">{project.phrase}</p>
+        </div>
+      </article>
     </section>
   );
 }

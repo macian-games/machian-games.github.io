@@ -1,13 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-primary font-sans antialiased overflow-x-hidden;
-    /* Custom scrollbar for dark theme */
+    @apply m-0 overflow-x-hidden bg-background font-sans text-primary antialiased;
+
     &::-webkit-scrollbar {
       width: 8px;
     }
@@ -23,7 +27,13 @@
     }
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-wide;
+  a:focus-visible {
+    @apply outline-none ring-2 ring-white ring-offset-4 ring-offset-background;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }
